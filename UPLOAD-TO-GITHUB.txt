@@ -1,0 +1,5 @@
+Envie TODO o conteúdo desta pasta para o repositório GitHub amidak202321/jj-delivery na branch main.
+
+O arquivo .github/workflows/build-apk.yml inicia o GitHub Actions automaticamente.
+Quando terminar, o artefato se chama: JJ-Delivery-APK
+Arquivo dentro do artefato: JJ-Delivery.apk
