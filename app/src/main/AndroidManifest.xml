@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
         android:label="JJ Delivery"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="false">
         <activity
