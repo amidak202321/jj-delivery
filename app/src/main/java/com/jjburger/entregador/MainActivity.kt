@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private var lastPositionSentAt = 0L
     private val routeLoading = AtomicBoolean(false)
 
-    private val background = Color.rgb(13, 15, 19)
+    private val backgroundColor = Color.rgb(13, 15, 19)
     private val surface = Color.rgb(27, 32, 40)
     private val surfaceRaised = Color.rgb(34, 40, 49)
     private val primary = Color.rgb(241, 183, 31)
@@ -76,8 +76,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = background
-        window.navigationBarColor = background
+        window.statusBarColor = backgroundColor
+        window.navigationBarColor = backgroundColor
         createChannel()
         askPermissions()
         token = prefs.getString("token", "") ?: ""
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(20.dp(), 18.dp(), 20.dp(), 30.dp())
-            setBackgroundColor(background)
+            setBackgroundColor(backgroundColor)
         }
     }
 
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             textSize = 16f
             setTextColor(textMain)
             setHintTextColor(Color.rgb(113, 123, 135))
-            singleLine = true
+            setSingleLine(true)
             minHeight = 54.dp()
             setPadding(15.dp(), 0, 15.dp(), 0)
             background = rounded(surfaceRaised, Color.rgb(57, 66, 78), 13)
@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         root = base()
         val scroll = ScrollView(this).apply {
             isFillViewport = true
-            setBackgroundColor(background)
+            setBackgroundColor(backgroundColor)
             addView(root)
         }
         setContentView(scroll)
@@ -218,7 +218,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
         add(root, messageView, 9)
         lateinit var loginButton: Button
-        loginButton = button("Entrar na rota") {
+        loginButton = button("Entrar na rota", {
             val accessCode = code.text.toString().trim()
             if (accessCode.length != 6) {
                 messageView.setTextColor(danger)
@@ -244,7 +244,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     }
                 }
             }
-        }
+        })
         add(root, loginButton, 14)
         add(root, text("A rota é atualizada automaticamente enquanto o aplicativo estiver aberto.", 12f).apply {
             setTextColor(Color.rgb(122, 132, 143))
@@ -257,7 +257,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         root = base()
         val scroll = ScrollView(this).apply {
             isFillViewport = true
-            setBackgroundColor(background)
+            setBackgroundColor(backgroundColor)
             addView(root)
         }
         setContentView(scroll)
