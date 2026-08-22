@@ -65,14 +65,14 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private var lastPositionSentAt = 0L
     private val routeLoading = AtomicBoolean(false)
 
-    private val backgroundColor = Color.rgb(13, 15, 19)
-    private val surface = Color.rgb(27, 32, 40)
-    private val surfaceRaised = Color.rgb(34, 40, 49)
-    private val primary = Color.rgb(241, 183, 31)
-    private val primaryText = Color.rgb(25, 24, 18)
-    private val textMain = Color.rgb(248, 249, 250)
-    private val textMuted = Color.rgb(166, 174, 184)
-    private val danger = Color.rgb(255, 137, 128)
+    private val backgroundColor = Color.rgb(10, 22, 16)
+    private val surface = Color.rgb(19, 38, 27)
+    private val surfaceRaised = Color.rgb(27, 51, 36)
+    private val primary = Color.rgb(255, 194, 64)
+    private val primaryText = Color.rgb(28, 27, 16)
+    private val textMain = Color.rgb(246, 250, 246)
+    private val textMuted = Color.rgb(164, 185, 169)
+    private val danger = Color.rgb(255, 145, 136)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private fun base(): LinearLayout {
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(20.dp(), 18.dp(), 20.dp(), 30.dp())
+            setPadding(18.dp(), 18.dp(), 18.dp(), 30.dp())
             setBackgroundColor(backgroundColor)
         }
     }
@@ -137,7 +137,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
             setSingleLine(true)
             minHeight = 54.dp()
             setPadding(15.dp(), 0, 15.dp(), 0)
-            background = rounded(surfaceRaised, Color.rgb(57, 66, 78), 13)
+            background = rounded(surfaceRaised, Color.rgb(57, 92, 67), 14)
+            importantForAutofill = View.IMPORTANT_FOR_AUTOFILL_YES
         }
     }
 
@@ -152,8 +153,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
             minimumWidth = 0
             setPadding(14.dp(), 0, 14.dp(), 0)
             setTextColor(foreground)
-            background = rounded(fill, if (filled) null else Color.rgb(65, 74, 86), 12)
+            background = rounded(fill, if (filled) null else Color.rgb(62, 101, 75), 13)
             stateListAnimator = null
+            elevation = if (filled) 3.dp().toFloat() else 0f
             setOnClickListener { onClick() }
         }
     }
@@ -162,7 +164,23 @@ class MainActivity : AppCompatActivity(), LocationListener {
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(17.dp(), 15.dp(), 17.dp(), 15.dp())
-            background = rounded(surface, Color.rgb(48, 57, 69), 17)
+            background = rounded(surface, Color.rgb(46, 80, 56), 18)
+            elevation = 3.dp().toFloat()
+        }
+    }
+
+    private fun logo(size: Int = 52): TextView {
+        return TextView(this).apply {
+            text = "JJ"
+            textSize = if (size >= 50) 18f else 14f
+            gravity = Gravity.CENTER
+            setTextColor(primaryText)
+            setTypeface(typeface, 1)
+            letterSpacing = -0.08f
+            contentDescription = "Logo JJ Delivery"
+            background = rounded(primary, Color.rgb(255, 220, 120), 16)
+            elevation = 4.dp().toFloat()
+            layoutParams = LinearLayout.LayoutParams(size.dp(), size.dp())
         }
     }
 
@@ -184,16 +202,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
         }
-        val mark = TextView(this).apply {
-            text = "JJ"
-            textSize = 18f
-            gravity = Gravity.CENTER
-            setTextColor(primaryText)
-            setTypeface(typeface, 1)
-            background = rounded(primary, radius = 14)
-            layoutParams = LinearLayout.LayoutParams(52.dp(), 52.dp())
-        }
-        header.addView(mark)
+        header.addView(logo())
         val brand = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(13.dp(), 0, 0, 0)
@@ -203,7 +212,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
         header.addView(brand, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         root.addView(header)
 
-        add(root, text("Acesse sua rota com o código entregue pela central.", 15f).apply { setTextColor(textMuted) }, 24)
+        add(root, text("●  CENTRAL ONLINE", 11f, true).apply {
+            setTextColor(Color.rgb(151, 224, 160))
+            background = rounded(Color.rgb(21, 58, 34), Color.rgb(54, 111, 66), 20)
+            setPadding(12.dp(), 8.dp(), 12.dp(), 8.dp())
+        }, 22)
+        add(root, text("Acesse sua rota com o código entregue pela central.", 15f).apply { setTextColor(textMuted) }, 14)
         val code = input("Código de 6 dígitos").apply {
             gravity = Gravity.CENTER
             textSize = 22f
@@ -277,8 +291,10 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val title = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         title.addView(text("Olá, $driverName", 24f, true))
         title.addView(text("Painel do entregador", 13f).apply { setTextColor(textMuted) })
+        header.addView(logo(46), params(width = LinearLayout.LayoutParams.WRAP_CONTENT))
+        title.setPadding(12.dp(), 0, 0, 0)
         header.addView(title, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
-        header.addView(button("Atualizar", { fetchRoute() }, false), params(width = LinearLayout.LayoutParams.WRAP_CONTENT))
+        header.addView(button("↻  Atualizar", { fetchRoute() }, false), params(width = LinearLayout.LayoutParams.WRAP_CONTENT))
         root.addView(header)
 
         val syncLabel = when {
@@ -288,7 +304,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             else -> "Atualizado às ${SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(lastSyncAt!!))}"
         }
         add(root, text("●  $syncLabel", 12f).apply {
-            setTextColor(if (routeError == null) Color.rgb(120, 206, 135) else danger)
+            setTextColor(if (routeError == null) Color.rgb(151, 224, 160) else danger)
         }, 8)
 
         routeError?.let { errorMessage ->
@@ -311,6 +327,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
             add(nextCard, text("PRÓXIMA ENTREGA", 12f, true).apply { setTextColor(primary) }, 0)
             add(nextCard, text("Pedido #${next.number}", 29f, true), 8)
             add(nextCard, text("Posição ${next.position} da rota", 13f).apply { setTextColor(textMuted) }, 2)
+            add(nextCard, text("${deliveries.size} parada(s) pendente(s) na sua rota", 12f).apply { setTextColor(Color.rgb(140, 171, 146)) }, 4)
 
             val navigation = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
             val waze = button("Abrir Waze", { navigate(next, true) }, false)
@@ -500,7 +517,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     private fun notifyNew(delivery: Delivery?) {
         val notification = NotificationCompat.Builder(this, "new_delivery")
-            .setSmallIcon(android.R.drawable.ic_dialog_map)
+            .setSmallIcon(R.drawable.ic_stat_jj)
             .setContentTitle("Nova entrega")
             .setContentText(if (delivery != null) "Pedido #${delivery.number} foi adicionado à sua rota." else "Nova entrega adicionada.")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
